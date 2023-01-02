@@ -1,0 +1,38 @@
+---
+- name: work on creating user
+  hosts: webserver
+  remote_user: vagrant
+  become: yes
+
+  tasks:
+    - name: Create user
+      user:
+       name: sefakor
+       comment: sefakor ama
+
+    - name: Create file
+      file:
+        dest: /tmp/kennth.txt
+        state: touch
+
+    - name: Create file
+      file:
+        dest: /tem/ansible_dir
+        state: directory
+        mode: '0755'
+
+    - name: Install apache
+      yum:
+          name: "{{ packages_to_install }}"
+      vars:
+          packages_to_install:
+           - httpd
+           - httpd-tools
+           - wget
+           - nano
+          state: present
+
+    - name: Start the apache server
+      service:
+        name: httpd
+        state: started
